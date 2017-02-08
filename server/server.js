@@ -1,28 +1,24 @@
 /* eslint-disable no-console, no-undef, no-unused-vars */
-import https from 'express-sslify'
-import Express from 'express'
+import {HTTPS as https} from 'express-sslify'
+import Express, {Router} from 'express'
 import cookieParser from 'cookie-parser'
 
-const PORT = 3000
+import routes from './routes'
 
 export function start() {
   const app = new Express()
 
-  app.use(cookieParser())
-
-  if (process.env.NODE_ENV === 'PRODUCTION') {
+  if (process.env.NODE_ENV === 'production') {
     app.use(https({trustProtoHeader: true}))
   }
+  app.use(cookieParser())
+  app.use('/', routes)
 
-  app.get('/', (req, res) => {
-    res.status(200).send('Hi!')
-  })
-
-  return app.listen(PORT, err => {
+  return app.listen(process.env.PORT, err => {
     if (err) {
       console.error(err)
     } else {
-      console.info(`🌍  Listening on port ${PORT}`)
+      console.info(`🌍  Listening on port ${process.env.PORT}`)
     }
   })
 }
