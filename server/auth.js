@@ -42,6 +42,7 @@ router.post(process.env.SAML_SLACK_LOGIN_PATH, samlp.auth({
   cert: process.env.SAML_PUBLIC_CERT,
   key: process.env.SAML_PRIVATE_KEY,
   profileMapper: mapSlackUserAttributes,
+  signResponse: true,
   getPostURL(audience, samlRequestDom, req, cb) {
     cb(null, process.env.SAML_SLACK_POSTBACK_URL)
   },
