@@ -2,7 +2,9 @@
 import {HTTPS as https} from 'express-sslify'
 import Express, {Router} from 'express'
 import cookieParser from 'cookie-parser'
+import bodyParser from 'body-parser'
 
+import auth from './auth'
 import routes from './routes'
 
 export function start() {
@@ -12,7 +14,10 @@ export function start() {
     app.use(https({trustProtoHeader: true}))
   }
   app.use(cookieParser())
-  app.use('/', routes)
+  app.use(bodyParser.urlencoded({ extended: false }))
+  app.use(bodyParser.json())
+  app.use(auth)
+  app.use(routes)
 
   return app.listen(process.env.PORT, err => {
     if (err) {
