@@ -7,12 +7,18 @@
 export default function mapSlackUserAttributes(user) {
   return {
     getClaims() {
-      return {
+      const nameParts = user.name.split(/\s+/)
+      const claims = {
         'User.Email': user.email,
         'User.Username': user.handle,
-        first_name: user.firstName,
-        last_name: user.lastName,
       }
+      if (nameParts.length > 0) {
+        claims.first_name = nameParts[0]
+      }
+      if (nameParts.length > 1) {
+        claims.last_name = nameParts[nameParts.length - 1]
+      }
+      return claims
     },
 
     getNameIdentifier() {
